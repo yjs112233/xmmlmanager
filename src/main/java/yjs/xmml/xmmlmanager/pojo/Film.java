@@ -40,6 +40,8 @@ public class Film {
     private String filmPrice;
     /**vip价格*/
     private String filmVipPrice;
+    /**被点击次数*/
+    private Integer filmClickNumber;
     /**软删除*/
     private Integer filmFlag;
 }

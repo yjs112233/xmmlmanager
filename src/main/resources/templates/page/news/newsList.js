@@ -7,33 +7,52 @@ layui.config({
 		$ = layui.jquery;
 
 	//加载页面数据
-	var newsData = '';
-	$.get("../../json/newsList.json", function(data){
-		var newArray = [];
-		//单击首页“待审核文章”加载的信息
-		if($(".top_tab li.layui-this cite",parent.document).text() == "待审核文章"){
-			if(window.sessionStorage.getItem("addNews")){
-				var addNews = window.sessionStorage.getItem("addNews");
-				newsData = JSON.parse(addNews).concat(data);
-			}else{
-				newsData = data;
-			}
-			for(var i=0;i<newsData.length;i++){
-        		if(newsData[i].newsStatus == "待审核"){
-					newArray.push(newsData[i]);
-        		}
-        	}
-        	newsData = newArray;
-        	newsList(newsData);
-		}else{    //正常加载信息
-			newsData = data;
-			if(window.sessionStorage.getItem("addNews")){
-				var addNews = window.sessionStorage.getItem("addNews");
-				newsData = JSON.parse(addNews).concat(newsData);
-			}
-			//执行加载数据的方法
-			newsList();
-		}
+	$(function () {
+		$.ajax({url:'/userInfo/all',type:'get',success:function (list) {
+				var $container=$(".news_content");
+				for (var i = 0; i < list.length; i++) {
+					var user=list[i];
+					var $tr=$("<tr></tr>");
+					$container.prepend($tr);
+					for (var j = 0; j <8 ; j++) {
+						var $td=$("<td></td>");
+						if (j==0){
+						   var check=$("<input type=\"checkbox\" name=\"checked\" lay-skin=\"primary\" lay-filter=\"choose\">");
+						   check.appendTo($td);
+						};
+						if (j==1)$td.html(user.userLoginPhone);
+						if (j==2) $td.html(user.userInfoName);
+						if (j==3) {
+							if (user.userIsReview==1&&user.userInfoRegisterImg!=""){
+								$td.html("已审核");
+								$td.css("color","green");
+							} else if (user.userIsReview==0&&user.userInfoRegisterImg!="") {
+								$td.html("待审核");
+								$td.css("color","red");
+							} else if (user.userIsReview==1&&user.userInfoRegisterImg=="") {
+								$td.html("身份异常");
+								$td.css("color","black");
+								$td.css("font-weight","bold");
+							} else{
+								$td.html("未审核");
+							}
+						}
+						if (j==4)$td.html(user.userLastLogin);
+						if (j==5)$td.html(user.userLoginCount);
+						if (j==6)$td.html(user.userCreateTime);
+						if (j==7){
+						 	var $a1=$("<a class=\"layui-btn layui-btn-mini news_edit\"><i class=\"iconfont icon-edit\"></i> 查看</a>");
+						 	var $a2=$("<a class=\"layui-btn layui-btn-normal layui-btn-mini news_collect\"><i class=\"layui-icon\">&#xe600;</i> 冻结</a>");
+						 	var $a3=$("<a class=\"layui-btn layui-btn-danger layui-btn-mini news_del\" data-id=\"'+data[i].newsId+'\"><i class=\"layui-icon\">&#xe640;</i> 注销</a>");
+							$a1.appendTo($td);
+							$a2.appendTo($td);
+						 	$a3.appendTo($td);
+						}
+						$td.appendTo($tr);
+					}
+				}
+				form.render();
+			}})
 	})
 
 	//查询
@@ -106,14 +125,16 @@ layui.config({
 		}
 	})
 
-	//添加文章
+	//审核用户
 	//改变窗口大小时，重置弹窗的高度，防止超出可视区域（如F12调出debug的操作）
 	$(window).one("resize",function(){
-		$(".newsAdd_btn").click(function(){
+		$(".authentication").click(function(){
 			var index = layui.layer.open({
-				title : "添加文章",
+				title : "待审核用户列表",
 				type : 2,
-				content : "newsAdd.html",
+				shade: [0.8, '#393D49'],
+				area: ['1200px', '600px'],
+				content : "authentication.html",
 				success : function(layero, index){
 					setTimeout(function(){
 						layui.layer.tips('点击此处返回文章列表', '.layui-layer-setwin .layui-layer-close', {
@@ -122,7 +143,7 @@ layui.config({
 					},500)
 				}
 			})			
-			layui.layer.full(index);
+			// layui.layer.full(index);
 		})
 	}).resize();
 

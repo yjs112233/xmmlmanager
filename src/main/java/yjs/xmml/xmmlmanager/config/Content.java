@@ -15,6 +15,10 @@ public class Content {
     public final static String wholeVideo="_whole_video";
     public final static String interval=",";     //details详图间隔符
     public final static String xl= File.separator;     //斜杠
+    /**学生证路径*/
+    public final static String studentCard="C:/students/";
+    public final static String handlerUrl="/student/**";
+
 
 
 }

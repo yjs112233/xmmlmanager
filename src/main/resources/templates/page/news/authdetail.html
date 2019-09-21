@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../../layui/css/layui.css" media="all" />
+</head>
+<body>
+<div class="layui-form">
+    <table class="layui-table">
+        <colgroup>
+            <col width="25%">
+            <col width="25%">
+            <col width="25%">
+            <col width="25%">
+        </colgroup>
+        <tbody>
+        <tr>
+            <td >姓名</td>
+            <td colspan="3" id="name">杨佳松</td>
+        </tr>
+        <tr>
+            <td >性别</td>
+            <td colspan="3" id="sex">男</td>
+        </tr>
+        <tr>
+            <td>学校</td>
+            <td id="school">汉族</td>
+            <td>专业</td>
+            <td id="major">英语</td>
+        </tr>
+        <tr>
+            <td>学校所在省</td>
+            <td id="province">拉丁美裔</td>
+            <td>学校所在市</td>
+            <td id="city">拉萨</td>
+        </tr>
+        <tr>
+            <td>毕业时间</td>
+            <td colspan="3" id="graduation">2019-06-16</td>
+        </tr>
+        <tr>
+            <td>学生证照片</td>
+            <td colspan="2" >
+                <div id="layer-photos-demo" class="layer-photos-demo">
+                    <img id="img">
+                </div>
+            </td>
+            <td>
+                <button type="button" class="layui-btn layui-btn-danger" onclick="bigImg()">查看大图</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<form class="layui-form">
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <input type="radio" name="check" lay-filter="check" value="拒绝通过" title="拒绝通过">
+            <input type="radio" name="check" lay-filter="check" value="允许通过" title="允许通过">
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">系统回复</label>
+        <div class="layui-input-block">
+            <textarea placeholder="请输入内容" class="layui-textarea" id="content" name="content"></textarea>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-input-block" style="text-align: center">
+            <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>
+        </div>
+    </div>
+</form>
+<script type="text/javascript" src="../../layui/layui.all.js"></script>
+<script type="text/javascript" src="authdetail.js"></script>
+</body>
+</html>
