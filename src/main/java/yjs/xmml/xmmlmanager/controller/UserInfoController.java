@@ -30,27 +30,4 @@ public class UserInfoController {
         logger.info("【用户列表:{}】",list);
         return list;
     }
-
-    /**
-     * 获取待审核用户列表
-     */
-    @RequestMapping("needCheck")
-    @ResponseBody
-    public List<UserDTO>  getCheckUserInfo(){
-        List<UserDTO> list=userInfoService.getCheckUserInfo();
-        logger.info("【待审核用户列表:{}】",list);
-       return list;
-    }
-
-    /**
-     * 通过登录id获取用户信息
-     */
-    @RequestMapping("one")
-    @ResponseBody
-    public UserInfo getUserInfoByLoginId(Integer loginId){
-        logger.info("【登录id:{}】",loginId);
-        UserInfo userInfo=userInfoService.getUserInfoByLoginId(loginId);
-        logger.info("【用户详情:{}】",userInfo);
-        return userInfo;
-    }
 }

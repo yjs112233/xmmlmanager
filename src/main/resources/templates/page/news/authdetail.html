@@ -43,11 +43,11 @@
             <td>学生证照片</td>
             <td colspan="2" >
                 <div id="layer-photos-demo" class="layer-photos-demo">
-                    <img id="img">
+                    <img id="img" >
                 </div>
             </td>
             <td>
-                <button type="button" class="layui-btn layui-btn-danger" onclick="bigImg()">查看大图</button>
+                <button type="submit" class="layui-btn layui-btn-danger"  id="bigImg" onclick="bigImg(this.value)">查看大图</button>
             </td>
         </tr>
         </tbody>
@@ -73,6 +73,7 @@
         </div>
     </div>
 </form>
+<script type="text/javascript" src="../../js/jquery.min.js"></script>
 <script type="text/javascript" src="../../layui/layui.all.js"></script>
 <script type="text/javascript" src="authdetail.js"></script>
 </body>

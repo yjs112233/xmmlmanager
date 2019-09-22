@@ -141,6 +141,11 @@ layui.config({
 							tips: 3
 						});
 					},500)
+				},
+				cancel: function(index, layero){
+					layer.close(index);
+					window.parent.location.reload();//刷新父页面
+					return false;
 				}
 			})			
 			// layui.layer.full(index);

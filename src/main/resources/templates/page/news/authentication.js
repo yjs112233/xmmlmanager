@@ -4,7 +4,7 @@ layui.config({
     var form = layui.form(),
         $ = layui.jquery;
 $(function () {
-    $.ajax({url:'/userInfo/needCheck',type:'get',success:function (list) {
+    $.ajax({url:'/authentication/needCheck',type:'get',success:function (list) {
             var $container=$(".news_content");
             for (var i = 0; i < list.length; i++) {
                 var user=list[i];

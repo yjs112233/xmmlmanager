@@ -1,8 +1,5 @@
 layui.use(['form', 'layedit', 'laydate'], function(){
-    var form = layui.form()
-        ,layer = layui.layer
-        ,table = layui.table
-        , $ = layui.jquery;
+    var form = layui.form();
     //加载数据
     $(function () {
         var url=location.href;
@@ -12,7 +9,7 @@ layui.use(['form', 'layedit', 'laydate'], function(){
             return;
         }
         $.ajax({
-            url:'/userInfo/one',
+            url:'/authentication/one',
             type:'post',
             data:{
                 "loginId":id
@@ -28,6 +25,7 @@ layui.use(['form', 'layedit', 'laydate'], function(){
                 $("#img").attr("src",url);
                 $("#img").attr("layer-src",url);
                 $("#img").css("width","20%");
+                $("#bigImg").val(url);
             }
         })
     })
@@ -48,27 +46,50 @@ layui.use(['form', 'layedit', 'laydate'], function(){
 
     //监听提交
     form.on('submit(demo1)', function(data){
+        //校验
         if (data.field.check=="拒绝通过"){
             if (data.field.content==""){
                 alert("请输入系统回复")
                 return ;
             }
         }
+        //获取用户登录id
+        var url=location.href;
+        var index=url.lastIndexOf("=");
+        var id=url.substring(index+1);
+        if (id==null||id==0||id==""){
+            return;
+        }
+        $.ajax({
+            url: '/authentication/result',
+            type: 'post',
+            data: {
+                "receiverId": id,
+                "messageContent":data.field.content,
+                "check":data.field.check
+            }, success: function (json) {
+                layer.msg(json);
+                setTimeout(function () {
+                    window.parent.location.reload();//刷新父页面
+                    parent.layer.close(index);//关闭弹出层
+                },1000)
+            }
+        })
         return false;
     });
 
 });
 
-
-function bigImg(){
-    alert(1);
-    //自定页
+function bigImg(url) {
+    //查看大图
     layer.open({
         type: 1,
-        skin: 'layui-layer-demo', //样式类名
-        closeBtn: 0, //不显示关闭按钮
-        anim: 2,
-        shadeClose: true, //开启遮罩关闭
-        content: ''
+        title: false,
+        closeBtn: 0,
+        area: ['600px', '360px'],
+        skin: 'layui-layer-nobg', //没有背景色
+        shadeClose: true,
+        content: "<div> <img src='"+url+"' style='width: 100%;'></div>"
     });
+
 }
