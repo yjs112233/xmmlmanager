@@ -15,6 +15,5 @@ public class User {
    private String userCreateTime;  //账号创建时间
    private Integer userLoginOut;   //是否注销
    private Integer userLoginFrozen;//是否冻结
-   private Integer userIsReview;  //是否认证  0 未认证  1 已认证
 
 }

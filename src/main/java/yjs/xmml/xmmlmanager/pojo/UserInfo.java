@@ -12,8 +12,6 @@ public class UserInfo {
     private Integer userLoginId;
     /**用户真实姓名*/
     private String userInfoName;
-    /**用户角色*/
-    private String userInfoRole;
     /**用户所在学校*/
     private String userInfoSchool;
     /**学校所在省份*/
@@ -24,8 +22,6 @@ public class UserInfo {
     private String userInfoMajor;
     /**毕业时间*/
     private String userInfoGraduationDate;
-    /**身份认证图片地址*/
-    private String userInfoRegisterImg;
     /**社区昵称*/
     private String userInfoNickName;
     /**用户性别*/

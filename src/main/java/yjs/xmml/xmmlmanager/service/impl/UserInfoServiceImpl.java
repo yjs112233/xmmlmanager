@@ -21,10 +21,6 @@ public class UserInfoServiceImpl implements UserInfoService {
         return userInfoDao.getUserInfo();
     }
 
-    @Override
-    public List<UserDTO> getCheckUserInfo() {
-        return userInfoDao.getCheckUserInfo();
-    }
 
     @Override
     public UserInfo getUserInfoByLoginId(Integer loginId) {

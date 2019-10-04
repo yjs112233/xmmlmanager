@@ -6,14 +6,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import yjs.xmml.xmmlmanager.dto.UserDTO;
+import yjs.xmml.xmmlmanager.dto.AuthDTO;
+import yjs.xmml.xmmlmanager.pojo.Auth;
 import yjs.xmml.xmmlmanager.pojo.Message;
 import yjs.xmml.xmmlmanager.pojo.UserInfo;
+import yjs.xmml.xmmlmanager.service.AuthService;
 import yjs.xmml.xmmlmanager.service.MessageService;
 import yjs.xmml.xmmlmanager.service.UserInfoService;
 import yjs.xmml.xmmlmanager.service.UserService;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("authentication")
@@ -27,27 +31,34 @@ public class authenticationController {
     MessageService messageService;
     @Autowired
     UserService userService;
+    @Autowired
+    AuthService authService;
     /**
      * 获取待审核用户列表
      */
     @RequestMapping("needCheck")
     @ResponseBody
-    public List<UserDTO> getCheckUserInfo(){
-        List<UserDTO> list=userInfoService.getCheckUserInfo();
+    public List<AuthDTO> getCheckUserInfo(){
+        List<AuthDTO> list=authService.getNeedAuth();
         logger.info("【待审核用户列表:{}】",list);
         return list;
     }
 
     /**
-     * 查看待审核用户详情
+     * 查看待审核用户所有历史记录详情
      */
     @RequestMapping("one")
     @ResponseBody
-    public UserInfo getUserInfoByLoginId(Integer loginId){
+    public Map  getUserInfoByLoginId(Integer loginId){
         logger.info("【登录id:{}】",loginId);
         UserInfo userInfo=userInfoService.getUserInfoByLoginId(loginId);
         logger.info("【用户详情:{}】",userInfo);
-        return userInfo;
+        List<Auth> authList= authService.getAuthListByUid(loginId);
+        logger.info("【用户审核历史记录:{}】",authList);
+        Map map=new HashMap();
+        map.put("info",userInfo);
+        map.put("authList",authList);
+        return map;
     }
     /**
      * 处理审核结果
@@ -58,8 +69,11 @@ public class authenticationController {
         logger.info("【消息详情:{},处理结果:{}】",message,check);
         if (check.equals("允许通过")){
             //发送短信
-            //修改身份验证状态
-            userService.alterReviewById(message.getReceiverId());
+            //修改身份验证状态:审核成功
+            authService.alterReviewById(message.getReceiverId(),9,"成功");
+        }else {
+            //修改身份验证状态:审核失败
+            authService.alterReviewById(message.getReceiverId(),8,message.getMessageContent());
         }
             //发送系统消息
         messageService.sysMessage(message);

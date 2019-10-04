@@ -18,7 +18,6 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public void sysMessage(Message message) {
         //发送者：系统
-        message.setSenderName("administrator");
         message.setSendTime(DateFormat.parse(new Date()));
         messageDao.sysMessage(message);
     }

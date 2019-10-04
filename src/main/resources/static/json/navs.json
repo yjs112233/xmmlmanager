@@ -31,7 +31,26 @@
 		{
 			"title" : "成片列表",
 			"icon" : "&#xe631;",
-			"href" : "page/systemParameter/upload.html",
+			"href" : "page/systemParameter/filmList.html",
+			"spread" : false
+		}
+	]
+},{
+	"title" : "防重管理",
+	"icon" : "&#xe631;",
+	"href" : "",
+	"spread" : false,
+	"children" : [
+		{
+			"title" : "使用记录",
+			"icon" : "&#xe631;",
+			"href" : "page/systemParameter/filmList.html",
+			"spread" : false
+		},
+		{
+			"title" : "可用筛选",
+			"icon" : "&#xe631;",
+			"href" : "page/systemParameter/filmList.html",
 			"spread" : false
 		}
 	]

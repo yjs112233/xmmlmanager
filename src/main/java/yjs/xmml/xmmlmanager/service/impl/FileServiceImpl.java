@@ -11,6 +11,7 @@ import yjs.xmml.xmmlmanager.pojo.Film;
 import yjs.xmml.xmmlmanager.service.FilmService;
 import yjs.xmml.xmmlmanager.tools.FileSave;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -23,5 +24,10 @@ public class FileServiceImpl implements FilmService {
     @Override
     public Integer save(Film film) {
         return filmDao.save(film);
+    }
+
+    @Override
+    public List<Film> getAllFilm() {
+        return filmDao.getAllFilm();
     }
 }

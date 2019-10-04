@@ -43,6 +43,19 @@ $(function () {
             this.value="《"+value+"》";
         }
     })
+    
+    $("#area").change(function () {
+        var value=this.value.trim();
+        if (value==1){
+            $("#RMB").attr("disabled","disabled");
+            $("#RMB").css("background-color","wheat");
+            $("#RMB").val("0.00");
+        }else {
+            $("#RMB").removeAttr("disabled");
+            $("#RMB").css("background-color","white");
+            $("#RMB").val("");
+        }
+    })
 })
 function verify() {
     var provider=$("#provider").val();
@@ -52,6 +65,7 @@ function verify() {
     var content=$("#content").val();
     var price=$("#RMB").val();
     var length=$("#length").val();
+    var filmTile=$("#title").val();
     var mainImg=document.getElementById("mainImg").files;
     var detailsImg=document.getElementById("detailsImg").files;
     //初始名称
@@ -61,6 +75,10 @@ function verify() {
     }
     if (provider==""){
         layer.msg("提供者不能为空")
+        return ;
+    }
+    if (filmTile==""){
+        layer.msg("标题描述不能为空")
         return ;
     }
     if (tips==""){
@@ -105,10 +123,13 @@ function upload() {
     //上传
     var provider=$("#provider").val();
     var name=$("#name").val();
+    var type=$("#type").val();
     var season=$("#season option:checked").val();
     var tips=$("#tips").val();
     var createTime=$("#createTime").val();
     var content=$("#content").val();
+    var area=$("#area").val();
+    var filmTile=$("#title").val();
     var price=$("#RMB").val();
     var length=$("#length").val();
     var mainImg=document.getElementById("mainImg").files;
@@ -118,11 +139,14 @@ function upload() {
     var formData=new FormData();
     formData.append("filmProvider",provider);
     formData.append("filmName",name);
+    formData.append("filmType",type);
     formData.append("filmSeason",season);
     formData.append("filmLength",length);
     formData.append("filmLables",tips);
     formData.append("filmCreateTime",createTime);
     formData.append("filmContent",content);
+    formData.append("filmArea",area);
+    formData.append("filmTitle",filmTile);
     formData.append("filmPrice",price);
     formData.append("mainImg",mainImg[0]);
     formData.append("oneVideo",oneVideo[0]);

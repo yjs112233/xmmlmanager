@@ -2,37 +2,37 @@ package yjs.xmml.xmmlmanager.dto;
 
 import lombok.Data;
 import lombok.ToString;
-import yjs.xmml.xmmlmanager.pojo.Auth;
-import java.util.*;
+
+import java.util.Date;
+
 @Data
 @ToString
-public class UserDTO {
-    /**主键id*/
+public class AuthDTO {
+
+    private Integer authId;
+    private Integer authUserId;
+    private String authImg;
+    /**创建时间*/
+    private Date authCreateTime;
+    /**审核时间*/
+    private Date authVerifyTime;
+    /**0 未审核  1待审核  9已审核*/
+    private Integer authStatus;
+    /**审核结果*/
+    private String authResult;
     private Integer userLoginId;    //主键
-    /**电话*/
     private String userLoginPhone;  //电话
-    /**密码*/
     private String userLoginPass;   //密码
-    /**盐值*/
     private String userLoginSalt;   //盐值
-    /**上次登录时间*/
     private String userLastLogin;   //上次登录时间
-    /**登录次数*/
     private Integer userLoginCount; //登录次数
-    /**账号创建时间*/
     private String userCreateTime;  //账号创建时间
-    /**是否注销*/
     private Integer userLoginOut;   //是否注销
-    /**是否冻结*/
     private Integer userLoginFrozen;//是否冻结
-    /**是否身份验证*/
-    private Integer userIsReview;
     /**主键id*/
     private Integer userInfoId;
     /**用户真实姓名*/
     private String userInfoName;
-    /**用户角色*/
-    private String userInfoRole;
     /**用户所在学校*/
     private String userInfoSchool;
     /**学校所在省份*/
@@ -43,8 +43,6 @@ public class UserDTO {
     private String userInfoMajor;
     /**毕业时间*/
     private String userInfoGraduationDate;
-    /**身份认证图片地址*/
-    private String userInfoRegisterImg;
     /**社区昵称*/
     private String userInfoNickName;
     /**用户性别*/
@@ -63,8 +61,6 @@ public class UserDTO {
     private String userInfoVxpayId;
     /**软删除*/
     private Integer userInfoFlag;
-    /**
-     * 认证信息
-     */
-    private List<Auth> auth;
+
+
 }

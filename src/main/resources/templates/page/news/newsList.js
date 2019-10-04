@@ -23,25 +23,28 @@ layui.config({
 						if (j==1)$td.html(user.userLoginPhone);
 						if (j==2) $td.html(user.userInfoName);
 						if (j==3) {
-							if (user.userIsReview==1&&user.userInfoRegisterImg!=""){
-								$td.html("已审核");
-								$td.css("color","green");
-							} else if (user.userIsReview==0&&user.userInfoRegisterImg!="") {
+							if (user.auth==null){
+								$td.html("未审核");
+							}else if (user.auth[0].authStatus==1) {
 								$td.html("待审核");
 								$td.css("color","red");
-							} else if (user.userIsReview==1&&user.userInfoRegisterImg=="") {
+							}else if (user.auth[0].authStatus==8){
+								$td.html("认证失败");
+								$td.css("color","green");
+							}else if (user.auth[0].authStatus==9){
+								$td.html("认证成功");
+								$td.css("color","green");
+							}else {
 								$td.html("身份异常");
 								$td.css("color","black");
 								$td.css("font-weight","bold");
-							} else{
-								$td.html("未审核");
 							}
 						}
 						if (j==4)$td.html(user.userLastLogin);
 						if (j==5)$td.html(user.userLoginCount);
 						if (j==6)$td.html(user.userCreateTime);
 						if (j==7){
-						 	var $a1=$("<a class=\"layui-btn layui-btn-mini news_edit\"><i class=\"iconfont icon-edit\"></i> 查看</a>");
+						 	var $a1=$("<a class=\"layui-btn layui-btn-mini \"  onclick='Info("+user.userLoginId+")'><i class=\"iconfont icon-edit\"></i> 资料</a>");
 						 	var $a2=$("<a class=\"layui-btn layui-btn-normal layui-btn-mini news_collect\"><i class=\"layui-icon\">&#xe600;</i> 冻结</a>");
 						 	var $a3=$("<a class=\"layui-btn layui-btn-danger layui-btn-mini news_del\" data-id=\"'+data[i].newsId+'\"><i class=\"layui-icon\">&#xe640;</i> 注销</a>");
 							$a1.appendTo($td);
@@ -136,19 +139,12 @@ layui.config({
 				area: ['1200px', '600px'],
 				content : "authentication.html",
 				success : function(layero, index){
-					setTimeout(function(){
-						layui.layer.tips('点击此处返回文章列表', '.layui-layer-setwin .layui-layer-close', {
-							tips: 3
-						});
-					},500)
 				},
 				cancel: function(index, layero){
 					layer.close(index);
-					window.parent.location.reload();//刷新父页面
-					return false;
+					return true;
 				}
-			})			
-			// layui.layer.full(index);
+			})
 		})
 	}).resize();
 
@@ -249,85 +245,109 @@ layui.config({
 			layer.msg("展示状态修改成功！");
         },2000);
 	})
- 
-	//操作
-	$("body").on("click",".news_edit",function(){  //编辑
-		layer.alert('您点击了文章编辑按钮，由于是纯静态页面，所以暂时不存在编辑内容，后期会添加，敬请谅解。。。',{icon:6, title:'文章编辑'});
-	})
 
-	$("body").on("click",".news_collect",function(){  //收藏.
-		if($(this).text().indexOf("已收藏") > 0){
-			layer.msg("取消收藏成功！");
-			$(this).html("<i class='layui-icon'>&#xe600;</i> 收藏");
-		}else{
-			layer.msg("收藏成功！");
-			$(this).html("<i class='iconfont icon-star'></i> 已收藏");
-		}
-	})
 
-	$("body").on("click",".news_del",function(){  //删除
-		var _this = $(this);
-		layer.confirm('确定删除此信息？',{icon:3, title:'提示信息'},function(index){
-			//_this.parents("tr").remove();
-			for(var i=0;i<newsData.length;i++){
-				if(newsData[i].newsId == _this.attr("data-id")){
-					newsData.splice(i,1);
-					newsList(newsData);
-				}
-			}
-			layer.close(index);
-		});
-	})
+	// $("body").on("click",".news_collect",function(){  //收藏.
+	// 	if($(this).text().indexOf("已收藏") > 0){
+	// 		layer.msg("取消收藏成功！");
+	// 		$(this).html("<i class='layui-icon'>&#xe600;</i> 收藏");
+	// 	}else{
+	// 		layer.msg("收藏成功！");
+	// 		$(this).html("<i class='iconfont icon-star'></i> 已收藏");
+	// 	}
+	// })
 
-	function newsList(that){
-		//渲染数据
-		function renderDate(data,curr){
-			var dataHtml = '';
-			if(!that){
-				currData = newsData.concat().splice(curr*nums-nums, nums);
-			}else{
-				currData = that.concat().splice(curr*nums-nums, nums);
-			}
-			if(currData.length != 0){
-				for(var i=0;i<currData.length;i++){
-					dataHtml += '<tr>'
-			    	+'<td><input type="checkbox" name="checked" lay-skin="primary" lay-filter="choose"></td>'
-			    	+'<td align="left">'+currData[i].newsName+'</td>'
-			    	+'<td>'+currData[i].newsAuthor+'</td>';
-			    	if(currData[i].newsStatus == "待审核"){
-			    		dataHtml += '<td style="color:#f00">'+currData[i].newsStatus+'</td>';
-			    	}else{
-			    		dataHtml += '<td>'+currData[i].newsStatus+'</td>';
-			    	}
-			    	dataHtml += '<td>'+currData[i].newsLook+'</td>'
-			    	+'<td><input type="checkbox" name="show" lay-skin="switch" lay-text="是|否" lay-filter="isShow"'+currData[i].isShow+'></td>'
-			    	+'<td>'+currData[i].newsTime+'</td>'
-			    	+'<td>'
-					+  '<a class="layui-btn layui-btn-mini news_edit"><i class="iconfont icon-edit"></i> 编辑</a>'
-					+  '<a class="layui-btn layui-btn-normal layui-btn-mini news_collect"><i class="layui-icon">&#xe600;</i> 收藏</a>'
-					+  '<a class="layui-btn layui-btn-danger layui-btn-mini news_del" data-id="'+data[i].newsId+'"><i class="layui-icon">&#xe640;</i> 删除</a>'
-			        +'</td>'
-			    	+'</tr>';
-				}
-			}else{
-				dataHtml = '<tr><td colspan="8">暂无数据</td></tr>';
-			}
-		    return dataHtml;
-		}
+	// $("body").on("click",".news_del",function(){  //删除
+	// 	var _this = $(this);
+	// 	layer.confirm('确定删除此信息？',{icon:3, title:'提示信息'},function(index){
+	// 		//_this.parents("tr").remove();
+	// 		for(var i=0;i<newsData.length;i++){
+	// 			if(newsData[i].newsId == _this.attr("data-id")){
+	// 				newsData.splice(i,1);
+	// 				newsList(newsData);
+	// 			}
+	// 		}
+	// 		layer.close(index);
+	// 	});
+	// })
 
-		//分页
-		var nums = 13; //每页出现的数据量
-		if(that){
-			newsData = that;
-		}
-		laypage({
-			cont : "page",
-			pages : Math.ceil(newsData.length/nums),
-			jump : function(obj){
-				$(".news_content").html(renderDate(newsData,obj.curr));
-				$('.news_list thead input[type="checkbox"]').prop("checked",false);
-		    	form.render();
-			}
-		})
-	}
+	// function newsList(that){
+	// 	//渲染数据
+	// 	function renderDate(data,curr){
+	// 		var dataHtml = '';
+	// 		if(!that){
+	// 			currData = newsData.concat().splice(curr*nums-nums, nums);
+	// 		}else{
+	// 			currData = that.concat().splice(curr*nums-nums, nums);
+	// 		}
+	// 		if(currData.length != 0){
+	// 			for(var i=0;i<currData.length;i++){
+	// 				dataHtml += '<tr>'
+	// 		    	+'<td><input type="checkbox" name="checked" lay-skin="primary" lay-filter="choose"></td>'
+	// 		    	+'<td align="left">'+currData[i].newsName+'</td>'
+	// 		    	+'<td>'+currData[i].newsAuthor+'</td>';
+	// 		    	if(currData[i].newsStatus == "待审核"){
+	// 		    		dataHtml += '<td style="color:#f00">'+currData[i].newsStatus+'</td>';
+	// 		    	}else{
+	// 		    		dataHtml += '<td>'+currData[i].newsStatus+'</td>';
+	// 		    	}
+	// 		    	dataHtml += '<td>'+currData[i].newsLook+'</td>'
+	// 		    	+'<td><input type="checkbox" name="show" lay-skin="switch" lay-text="是|否" lay-filter="isShow"'+currData[i].isShow+'></td>'
+	// 		    	+'<td>'+currData[i].newsTime+'</td>'
+	// 		    	+'<td>'
+	// 				+  '<a class="layui-btn layui-btn-mini news_edit"><i class="iconfont icon-edit"></i> 编辑</a>'
+	// 				+  '<a class="layui-btn layui-btn-normal layui-btn-mini news_collect"><i class="layui-icon">&#xe600;</i> 收藏</a>'
+	// 				+  '<a class="layui-btn layui-btn-danger layui-btn-mini news_del" data-id="'+data[i].newsId+'"><i class="layui-icon">&#xe640;</i> 删除</a>'
+	// 		        +'</td>'
+	// 		    	+'</tr>';
+	// 			}
+	// 		}else{
+	// 			dataHtml = '<tr><td colspan="8">暂无数据</td></tr>';
+	// 		}
+	// 	    return dataHtml;
+	// 	}
+	//
+	// 	//分页
+	// 	var nums = 13; //每页出现的数据量
+	// 	if(that){
+	// 		newsData = that;
+	// 	}
+	// 	laypage({
+	// 		cont : "page",
+	// 		pages : Math.ceil(newsData.length/nums),
+	// 		jump : function(obj){
+	// 			$(".news_content").html(renderDate(newsData,obj.curr));
+	// 			$('.news_list thead input[type="checkbox"]').prop("checked",false);
+	// 	    	form.render();
+	// 		}
+	// 	})
+	// }
 })
+
+
+//资料
+function Info(id){
+	$.ajax({
+		url:'/userInfo/one',
+		type:'post',
+		data:{
+			"id":id
+		},success:function (info) {
+			var str="<p>姓名:"+info.userInfoName+"</p>";
+			str+="<p>性别:"+info.userInfoSex+"</p>";
+			str+="<p>学校:"+info.userInfoSchool+"</p>";
+			str+="<p>学校所在省:"+info.userInfoSchoolProvince+"</p>";
+			str+="<p>学校所在市:"+info.userInfoSchoolCity+"</p>";
+			str+="<p>专业:"+info.userInfoMajor+"</p>";
+			str+="<p>毕业期限:"+info.userInfoGraduationDate+"</p>";
+			str+="<p>社区昵称:"+info.userInfoNickName+"</p>";
+			str+="<p>邮箱:"+info.userInfoEmail+"</p>";
+			str+="<p>微信号:"+info.userInfoWechat+"</p>";
+			str+="<p>账户余额:"+info.userInfoBlance+"</p>";
+			str+="<p>优惠券:"+info.userInfoCoupon+"</p>";
+			str+="<p>支付宝账号:"+info.userInfoAlipayId+"</p>";
+			str+="<p>微信支付账号:"+info.userInfoVxpayId+"</p>";
+			layer.alert(str,{icon:6, title:'友链编辑'});
+		}
+	})
+}

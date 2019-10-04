@@ -30,4 +30,16 @@ public class UserInfoController {
         logger.info("【用户列表:{}】",list);
         return list;
     }
+
+    /**
+     * 查询用户详细资料
+     */
+    @RequestMapping("one")
+    @ResponseBody
+    public UserInfo getUserInfo(Integer id){
+        logger.info("【用户id:{}】",id);
+        UserInfo userInfo= userInfoService.getUserInfoByLoginId(id);
+        logger.info("【资料:{}】",userInfo);
+        return userInfo;
+    }
 }

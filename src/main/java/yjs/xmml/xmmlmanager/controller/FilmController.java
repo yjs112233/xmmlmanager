@@ -13,7 +13,7 @@ import yjs.xmml.xmmlmanager.pojo.Film;
 import yjs.xmml.xmmlmanager.service.FilmService;
 import yjs.xmml.xmmlmanager.tools.FileSave;
 import java.util.UUID;
-
+import java.util.*;
 @Controller
 @RequestMapping("film")
 public class FilmController {
@@ -22,6 +22,10 @@ public class FilmController {
 
     @Autowired
     FilmService filmService;
+
+    /**
+     * 作品上传
+     */
     @RequestMapping("upload")
     @ResponseBody
     public String  uploadFilm(Film film, MultipartFile mainImg,
@@ -60,5 +64,17 @@ public class FilmController {
         //储存
         filmService.save(film);
         return "上传成功";
+    }
+
+
+    /**
+     *获取所有作品
+     */
+    @RequestMapping("all")
+    @ResponseBody
+    public List<Film> getAllFilm(){
+        List<Film> list= filmService.getAllFilm();
+        logger.info("【作品总数:{}】",list.size());
+        return list;
     }
 }

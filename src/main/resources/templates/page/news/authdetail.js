@@ -13,7 +13,9 @@ layui.use(['form', 'layedit', 'laydate'], function(){
             type:'post',
             data:{
                 "loginId":id
-            },success:function (userInfo) {
+            },success:function (map) {
+                var userInfo=map.info;
+                var authList=map.authList;
                 $("#name").html(userInfo.userInfoName);
                 $("#sex").html(userInfo.userInfoSex);
                 $("#school").html(userInfo.userInfoSchool);
@@ -21,11 +23,28 @@ layui.use(['form', 'layedit', 'laydate'], function(){
                 $("#city").html(userInfo.userInfoSchoolCity);
                 $("#major").html(userInfo.userInfoMajor);
                 $("#graduation").html(userInfo.userInfoGraduationDate);
-                var url="/student/"+userInfo.userInfoRegisterImg;
+                var url="/student/"+authList[0].authImg;
                 $("#img").attr("src",url);
                 $("#img").attr("layer-src",url);
                 $("#img").css("width","20%");
                 $("#bigImg").val(url);
+                if (authList.length>1){
+                    var tbody=$("#tbody");
+                    for (var i = 1; i < authList.length; i++) {
+                        var auth=authList[i];
+                        var tr=$("<tr>");tr.appendTo(tbody);
+                        var td1=$("<td>");td1.appendTo(tr);
+                        var td2=$("<td>");td2.appendTo(tr);
+                        var td3=$("<td>");td3.appendTo(tr);
+                        var td4=$("<td>");td4.appendTo(tr);
+                        td1.html("历史审核"+i);
+                        td1.css("color","red");
+                        td2.html("提交时间:"+auth.authCreateTime);
+                        var url="/student/"+auth.authImg;
+                        td3.html("<img src='"+url+"' >");
+                        td4.html("审核结果<p>"+auth.authResult+"</p>");
+                    }
+                }
             }
         })
     })

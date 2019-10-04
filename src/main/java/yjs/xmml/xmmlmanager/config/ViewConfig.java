@@ -22,6 +22,8 @@ public class ViewConfig implements WebMvcConfigurer {
         registry.addViewController("page/news/authentication.js").setViewName("page/news/authentication.js");
         registry.addViewController("page/news/authdetail.html").setViewName("page/news/authdetail.html");
         registry.addViewController("page/news/authdetail.js").setViewName("page/news/authdetail.js");
+        registry.addViewController("page/systemParameter/filmList.html").setViewName("page/systemParameter/filmList.html");
+        registry.addViewController("page/systemParameter/filmList.js").setViewName("page/systemParameter/filmList.js");
     }
 
 
